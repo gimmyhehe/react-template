@@ -1,10 +1,15 @@
-// const presets = [
-//   [
-//     '@babel/preset-env',
-//     {
-//       'useBuiltIns': 'entry'
-//     }
-//   ]
-// ]
+const presets = [
+  [
+    '@babel/preset-env',
+    {
+      'useBuiltIns': 'entry'
+    }
+  ],
+  ['@babel/preset-react']
+]
 
-// module.exports = { presets }
+const plugins = [
+  ['@babel/plugin-transform-runtime']
+]
+
+module.exports = { presets,plugins }

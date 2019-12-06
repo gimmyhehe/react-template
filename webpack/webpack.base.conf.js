@@ -27,14 +27,14 @@ module.exports ={
         test: /\.js$/,
         use:{
           loader:'babel-loader',
-          options:{
-            presets:[
-              '@babel/preset-env'
-            ],
-            plugins:[
-              ["@babel/plugin-transform-runtime"]
-            ]
-          }
+          // options:{
+          //   presets:[
+          //     '@babel/preset-env'
+          //   ],
+          //   plugins:[
+          //     ["@babel/plugin-transform-runtime"]
+          //   ]
+          // }
         },
         include: path.resolve(__dirname,'../src/'),
         exclude: /node_modules/
