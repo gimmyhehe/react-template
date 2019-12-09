@@ -2,6 +2,9 @@ var webpack = require('webpack')
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
+var HappyPack = require('happypack')
+var happyThreadPool = HappyPack.ThreadPool({ size: 5 })
 var isProduction = process.env.NODE_ENV === 'production'
 
 function resolve(dir) {
@@ -24,18 +27,8 @@ module.exports ={
       // },
       //这里的options也可以写在babel.config.js
       {
-        test: /\.js$/,
-        use:{
-          loader:'babel-loader',
-          // options:{
-          //   presets:[
-          //     '@babel/preset-env'
-          //   ],
-          //   plugins:[
-          //     ["@babel/plugin-transform-runtime"]
-          //   ]
-          // }
-        },
+        test: /\.(js|jsx)$/,
+        use: 'Happypack/loader?id=js',
         include: path.resolve(__dirname,'../src/'),
         exclude: /node_modules/
       },
@@ -43,13 +36,12 @@ module.exports ={
         test: /\.css$/,
         use: utils.getStyleLoaders(),
       },
-      // {
-      //   test: /\.less$/,
-      //   use: utils.generateCSSLoaders('less', {
-      //     modifyVars: utils.getThemeConfig(),
-      //     javascriptEnabled: true
-      //   }),
-      // },
+      {
+        test: /\.less$/,
+        use: utils.getStyleLoaders( {
+          javascriptEnabled: true
+        },'less-loader'),
+      },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
@@ -77,13 +69,25 @@ module.exports ={
     ]
   },
   plugins: [
-    // Webpack3 的 Scope Hositing 特性
-    new webpack.optimize.ModuleConcatenationPlugin(),
+    new HappyPack({
+      id: 'js',
+      threadPool: happyThreadPool,
+      loaders: [ 'babel-loader' ]
+    }),
+    // new webpack.DllReferencePlugin({
+    //   manifest: require('../public/manifest.json'),
+    // }),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../public'),
+        to: path.resolve(__dirname, '../dist'),
+      }
+    ]),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     // DefinePlugin 是webpack 的内置插件，该插件可以在打包时候替换制定的变量
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': isProduction ?
         config.build.env : config.dev.env
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]
 }

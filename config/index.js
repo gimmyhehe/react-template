@@ -1,16 +1,16 @@
 // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 var path = require('path')
-var ouputDir = '../dist'
 var resolve = function (dir) {
   return path.join(__dirname, '..', dir)
 }
-
+const buildDir = path.resolve(__dirname,'../dist')
 module.exports = {
+  buildDir,
   common:{
     entry:'./src/index.js',
     output : {
-      path: path.resolve(__dirname,ouputDir),
-      filename : 'bundle.[contenthash:8].js'
+      path: buildDir,
+      filename : 'bundle.[hash:8].js'
    },
     alias: {
       '@': resolve('src'),

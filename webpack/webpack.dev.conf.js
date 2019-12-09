@@ -15,13 +15,30 @@ if (!process.env.NODE_ENV) {
 
 module.exports = merge(baseWebpackConfig,{
   devServer:{
+    hot:true,
     port : 3000,
     progress : true,
-    contentBase: './dist', //the path where the build target put
-    compress:true //
+    disableHostCheck: true, //  解决IEInvalid Host/Origin header 的问题
+    contentBase: config.buildDir, //the path where the build target put
+    // 前端mock数据
+    // before(app){
+    //   app.get('/test',function(req,res){
+    //     res.json({name:'gimmyhehe'})
+    //   })
+    // },
+    proxy:{
+      '/api': {
+        target: 'http://localhost:3001',
+        pathRewrite:{'/api':'/api'},
+        secure: false,
+        changeOrigin: true,
+      }
+    }
   },
   plugins:[
-    new CleanWebpackPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './public/index.html',
       filename: 'index.html',
