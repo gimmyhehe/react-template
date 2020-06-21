@@ -20,6 +20,7 @@ module.exports = merge(baseWebpackConfig,{
     progress : true,
     disableHostCheck: true, //  解决IEInvalid Host/Origin header 的问题
     contentBase: config.buildDir, //the path where the build target put
+    historyApiFallback: true,
     // 前端mock数据
     // before(app){
     //   app.get('/test',function(req,res){
