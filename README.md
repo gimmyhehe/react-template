@@ -4,4 +4,5 @@ A project template for react created by cgm
 # 项目使用webpack4进行自定义配置
 # 项目集成了react + react-router + redux + axios
 # eslint规则为推荐设置111
-# test1 tess12312 test003
+111111111
+2222222222
